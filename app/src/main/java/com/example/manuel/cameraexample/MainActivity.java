@@ -20,22 +20,23 @@ public class MainActivity extends ActionBarActivity {
 
     private static final String TAG = MainActivity.class.getSimpleName();
     private Camera mCamera;
-    private CameraPreview mPreview;
-    private FrameLayout preview;
-    private Button captureButton;
+    private CameraPreview mCameraPreview;
+    private FrameLayout mPreviewFrameLayout;
+    private Button mCaptureButton;
     private Camera.PictureCallback mPictureCallback;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        preview = (FrameLayout) findViewById(R.id.camera_preview);
+        mPreviewFrameLayout = (FrameLayout) findViewById(R.id.camera_preview);
 
         mPictureCallback= new PictureCallBack();
 
         // Add a listener to the Capture button
-        captureButton = (Button) findViewById(R.id.button_capture);
-        captureButton.setOnClickListener(
+        mCaptureButton = (Button) findViewById(R.id.button_capture);
+        mCaptureButton.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -60,8 +61,8 @@ public class MainActivity extends ActionBarActivity {
         mCamera = getCameraInstance();
 
         if (mCamera !=null) {
-            mPreview = new CameraPreview(MainActivity.this, mCamera);
-            preview.addView(mPreview);
+            mCameraPreview = new CameraPreview(MainActivity.this, mCamera);
+            mPreviewFrameLayout.addView(mCameraPreview);
         }
 
     }
@@ -114,7 +115,7 @@ public class MainActivity extends ActionBarActivity {
     private void stopPreviewAndFreeCamera() {
 
         if (mCamera != null) {
-            // Call stopPreview() to stop updating the preview surface.
+            // Call stopPreview() to stop updating the mPreviewFrameLayout surface.
             mCamera.stopPreview();
 
             // Important: Call release() to release the camera for use by other
@@ -122,8 +123,8 @@ public class MainActivity extends ActionBarActivity {
             // during onPause() and re-open() it during onResume()).
             mCamera.release();
             mCamera = null;
-            preview.removeAllViews();
-            mPreview=null;
+            mPreviewFrameLayout.removeAllViews();
+            mCameraPreview =null;
         }
 
 
